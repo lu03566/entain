@@ -94,6 +94,7 @@ curl -X "POST" "http://localhost:8000/v1/list-races" \
 
 4. Introduce a new RPC, that allows us to fetch a single race by its ID.
    > This link here might help you on your way: https://cloud.google.com/apis/design/standard_methods#get
+   ```Example Get Request: http://localhost:8000/v1/races/{id} ```
 
 5. Create a `sports` service that for sake of simplicity, implements a similar API to racing. This sports API can be called `ListEvents`. We'll leave it up to you to determine what you might think a sports event is made up off, but it should at minimum have an `id`, a `name` and an `advertised_start_time`.
 

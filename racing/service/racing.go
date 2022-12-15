@@ -9,6 +9,8 @@ import (
 type Racing interface {
 	// ListRaces will return a collection of races.
 	ListRaces(ctx context.Context, in *racing.ListRacesRequest) (*racing.ListRacesResponse, error)
+	// Get will allows us to fetch a single race by its ID.
+	GetRace(ctx context.Context, in *racing.GetRaceRequest) (*racing.Race, error)
 }
 
 // racingService implements the Racing interface.
@@ -28,4 +30,13 @@ func (s *racingService) ListRaces(ctx context.Context, in *racing.ListRacesReque
 	}
 
 	return &racing.ListRacesResponse{Races: races}, nil
+}
+
+func (s *racingService) GetRace(ctx context.Context, in *racing.GetRaceRequest) (*racing.Race, error) {
+	race, err := s.racesRepo.Get(in)
+	if err != nil {
+		return nil, err
+	}
+
+	return race, nil
 }
