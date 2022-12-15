@@ -121,6 +121,13 @@ func (m *racesRepo) scanRaces(
 
 		race.AdvertisedStartTime = ts
 
+		// Check and compare `advertised_start_time`, if it's in the past status should reflect `CLOSED` ELSE `OPEN`
+		if advertisedStart.Before(time.Now()) {
+			race.Status = "CLOSED"
+		} else {
+			race.Status = "OPEN"
+		}
+
 		races = append(races, &race)
 	}
 
