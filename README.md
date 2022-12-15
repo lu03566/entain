@@ -86,6 +86,8 @@ curl -X "POST" "http://localhost:8000/v1/list-races" \
 
 2. We'd like to see the races returned, ordered by their `advertised_start_time`
    > Bonus points if you allow the consumer to specify an ORDER/SORT-BY they might be after. 
+   ```Request body to fetch races order by advertised_start_time in ascending order: "filter": {"orderBy": "ASC"}```
+   ```Request body to fetch races order by advertised_start_time in descending order: "filter": {"orderBy": "DESC"}```
 
 3. Our races require a new `status` field that is derived based on their `advertised_start_time`'s. The status is simply, `OPEN` or `CLOSED`. All races that have an `advertised_start_time` in the past should reflect `CLOSED`. 
    > There's a number of ways this could be implemented. Just have a go!
