@@ -7,6 +7,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"strconv"
 
 	"git.neds.sh/matty/entain/racing/proto/racing"
 )
@@ -18,6 +19,9 @@ type RacesRepo interface {
 
 	// List will return a list of races.
 	List(filter *racing.ListRacesRequestFilter) ([]*racing.Race, error)
+
+	// Get will allows us to fetch a single race by its ID.
+	Get(filter *racing.GetRaceRequest) (*racing.Race, error)
 }
 
 type racesRepo struct {
@@ -59,6 +63,34 @@ func (r *racesRepo) List(filter *racing.ListRacesRequestFilter) ([]*racing.Race,
 	}
 
 	return r.scanRaces(rows)
+}
+
+// Get race by ID
+func (r *racesRepo) Get(filter *racing.GetRaceRequest) (*racing.Race, error) {
+	var (
+		err   error
+		query string
+		args  []interface{}
+	)
+
+	query = getRaceQueries()[racesList]
+
+	query += " WHERE id=" + strconv.FormatInt(filter.Id, 10)
+
+	rows, err := r.db.Query(query, args...)
+
+	if err != nil {
+		return nil, err
+	}
+
+	races, err := r.scanRaces(rows)
+
+	// If no record found return nil (Server will crash if trying to return races[0] when there is no result)
+	if len(races) == 0 {
+		return nil, err
+	}
+	
+	return races[0], err
 }
 
 func (r *racesRepo) applyFilter(query string, filter *racing.ListRacesRequestFilter) (string, []interface{}) {
