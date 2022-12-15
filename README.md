@@ -46,10 +46,19 @@ brew install protobuf
 cd ./racing
 
 go build && ./racing
-➜ INFO[0000] gRPC server listening on: localhost:9000
+➜ INFO[0000] racing server listening on: localhost:9000
 ```
 
-3. In another terminal window, start our api service...
+3. In another terminal window, start our sports service...
+
+```bash
+cd ./sports
+
+go build && ./sports
+➜ INFO[0000] sports server listening on: localhost:10000
+```
+
+4. In another terminal window, start our api service...
 
 ```bash
 cd ./api
@@ -58,7 +67,7 @@ go build && ./api
 ➜ INFO[0000] API server listening on: localhost:8000
 ```
 
-4. Make a request for races... 
+5. Make a request for races... 
 
 ```bash
 curl -X "POST" "http://localhost:8000/v1/list-races" \
@@ -67,6 +76,17 @@ curl -X "POST" "http://localhost:8000/v1/list-races" \
   "filter": {}
 }'
 ```
+
+6. Make a request for events... 
+
+```bash
+curl -X "POST" "http://localhost:8000/v1/list-events" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "filter": {}
+}'
+```
+
 
 ### Changes/Updates Required
 
@@ -97,6 +117,8 @@ curl -X "POST" "http://localhost:8000/v1/list-races" \
    ```Example Get Request: http://localhost:8000/v1/races/{id} ```
 
 5. Create a `sports` service that for sake of simplicity, implements a similar API to racing. This sports API can be called `ListEvents`. We'll leave it up to you to determine what you might think a sports event is made up off, but it should at minimum have an `id`, a `name` and an `advertised_start_time`.
+   ```Example Post Request: http://localhost:8000/v1/list-events ```
+   ```Request body to fetch all regardless of their visibility: "filter": {}```
 
 > Note: this should be a separate service, not bolted onto the existing racing service. At an extremely high-level, the diagram below attempts to provide a visual representation showing the separation of services needed and flow of requests.
 > 
